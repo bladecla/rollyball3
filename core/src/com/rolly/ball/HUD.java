@@ -25,7 +25,7 @@ public class HUD {
 	private Float score = 0f;
 	public Stage stage;
 	private Table table;
-	private Label scoreLabel, distLabel;
+	private Label scoreLabel, distLabel, messageLabel;
 	private Label.LabelStyle white;
 	private Viewport port;
 	private Skin skin;
@@ -62,5 +62,12 @@ public class HUD {
 		
 		font.draw(batch, score, distLabel.getRight() + port.getScreenWidth()/20, distLabel.getHeight()/1.5f);
 		font.draw(batch, hiscore, scoreLabel.getRight() + port.getScreenWidth()/20, scoreLabel.getHeight()/1.5f);
+	}
+
+	public void message(Batch batch, String message){
+
+
+		font.draw(batch, message, port.getScreenWidth()/2, port.getScreenHeight()/2 + font.getCapHeight(), 0, 1, false );
+
 	}
 }

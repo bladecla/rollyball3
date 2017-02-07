@@ -58,9 +58,10 @@ public class GameScreen implements Screen{
 	private float timer;
 	private float oldP;
 	private float groundHeight;
-	private boolean jumping;
+	private boolean jumping, drawMsg = true;
 	private boolean pressed = false;
 	public State gameState;
+	private String message;
 	
 	private BitmapFont font;
 	
@@ -88,7 +89,7 @@ public class GameScreen implements Screen{
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
-	world = new World(new Vector2(0, -V_HEIGHT/50), true);
+	world = new World(new Vector2(0, -V_HEIGHT/30), true);
 	world.setContactListener(cm = new CollisionManager());
 	b2dr = new Box2DDebugRenderer();
 		ground = new Ground(port.getWorldWidth() *2, groundHeight, world);
@@ -111,7 +112,7 @@ public class GameScreen implements Screen{
 	{
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/ALBA____.TTF"));
 		FreeTypeFontGenerator.FreeTypeFontParameter params = new FreeTypeFontGenerator.FreeTypeFontParameter();
-		params.size = 36;
+		params.size = (int)(.06*V_HEIGHT);
 		params.color = Color.WHITE;
 		font = generator.generateFont(params);
 	}
@@ -154,7 +155,7 @@ public class GameScreen implements Screen{
 			die.stop();
 			ready.play();
 
-
+		message = "Tap!";
 			
 			if (rolly == null)
 			{
@@ -165,6 +166,7 @@ public class GameScreen implements Screen{
 			}
 			if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || (Gdx.input.justTouched()))
 			{
+				message = "Let's Roll!";
 				ready.setLooping(false);
 			gameState = State.Play;
 			}	
@@ -194,6 +196,7 @@ public class GameScreen implements Screen{
 			
 	if (timer > platformDelay && rolly.maxSpeedReached())
 	{
+		drawMsg = false;
 		if (handler.getList().size() < 5)
 		{
 		handler.Add(new Platform(world, camera.position.x + port.getWorldWidth()/2));
@@ -248,9 +251,14 @@ public class GameScreen implements Screen{
 //			world.destroyBody(rolly.GetBody());
 			rolly.kill(true);
 			rolly = null;
+				timer = 0;
+				message = "GAME OVER";
+				drawMsg = true;
 			}
-			
-			if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.justTouched())
+
+
+
+			if ((Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.justTouched()) && timer >= 3)
 			{
 				camera.position.set((port.getWorldWidth()/2) , (port.getWorldHeight()/2) , 0);
 				handler.Clear();
@@ -289,7 +297,11 @@ public class GameScreen implements Screen{
 		handler.Draw(game.batch);
 		game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
 		hud.draw(game.batch, score.toString(), hiscore.toString());
+		if (drawMsg) {
+			hud.message(game.batch, message);
+		}
 		game.batch.end();
+
 		
 		
 //		hud.setScore(distance);
