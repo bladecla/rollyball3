@@ -14,11 +14,12 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
 import static com.rolly.ball.Constants.PPM;
+import static com.rolly.ball.Constants.V_HEIGHT;
 
 public class Platform extends Sprite{
 	
 	//fields
-	private int w = 148, h = 27;
+	private int w = (int)V_HEIGHT/3, h = (int)V_HEIGHT/18;
 	private Random rand;
 	private int spawnRange;
 	private float x;
@@ -38,7 +39,7 @@ public class Platform extends Sprite{
 		this.x = x;
 		this.world = world;
 		rand = new Random();
-		spawnRange =  10 * (18 + rand.nextInt(28));
+		spawnRange =   (int)(.3*V_HEIGHT + rand.nextInt((int)(.5*V_HEIGHT)));
 		
 		setBounds(0, 0, w/PPM, h/PPM);
 		
@@ -58,7 +59,7 @@ public class Platform extends Sprite{
 		body.createFixture(fdef);
 		
 		shape = new PolygonShape();
-		shape.setAsBox(((w/2) - 6)/PPM, h/6/PPM, new Vector2(4/PPM, h/4/PPM), 0);
+		shape.setAsBox(((w/2) - w/25)/PPM, h/6/PPM, new Vector2(4/PPM, h/4/PPM), 0);
 		
 		
 		fdef.shape = shape;

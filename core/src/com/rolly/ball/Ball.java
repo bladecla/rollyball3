@@ -13,13 +13,15 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 
 import static com.rolly.ball.Constants.PPM;
+import static com.rolly.ball.Constants.V_HEIGHT;
+import static com.rolly.ball.Constants.V_WIDTH;
 
 public class Ball extends Sprite{
 
 	//fields
-	private int diameter = 75;
-	private float jumpVel = 8;
-	private float xVel = 2.3f ;
+	private int diameter = (int)V_HEIGHT/6;
+	private float jumpVel = diameter/12.5f;
+	private float xVel = diameter/30 ;
 	private BodyDef bdef = new BodyDef();
 	private FixtureDef fdef = new FixtureDef();
 	private Body body;
@@ -36,7 +38,7 @@ public class Ball extends Sprite{
 		setBounds(0, 0, diameter/PPM, diameter/PPM);
 		setOriginCenter();
 		bdef.type = BodyDef.BodyType.DynamicBody;
-		bdef.position.set(new Vector2(100/PPM,500/ PPM));
+		bdef.position.set(new Vector2(V_WIDTH/10/PPM, V_HEIGHT/PPM));
 		
 		this.world = world;
 //		bdef.linearVelocity.set(xVel,0);
@@ -56,7 +58,7 @@ public class Ball extends Sprite{
 		body.createFixture(fdef);
 		
 		shape = new CircleShape();
-		fdef.shape.setRadius((diameter + 5)/2/PPM);
+		fdef.shape.setRadius((diameter + diameter/12)/2/PPM);
 		
 		fdef.isSensor = true;
 		
@@ -83,7 +85,7 @@ public class Ball extends Sprite{
 	
 	public boolean maxSpeedReached()
 	{
-		if(body.getLinearVelocity().x >= 3*xVel/4)
+		if(body.getLinearVelocity().x >= 2*xVel/3)
 		{
 			return true;
 		}
@@ -152,7 +154,7 @@ public class Ball extends Sprite{
 		
 		if(grounded && body.getLinearVelocity().x < xVel)
 		{
-		body.applyForceToCenter(.5f, 0, true);
+		body.applyForceToCenter(V_HEIGHT/500, 0, true);
 		}
 		xVel += Gdx.graphics.getDeltaTime()/100;
 	}

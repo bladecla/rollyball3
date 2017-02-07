@@ -1,6 +1,8 @@
 package com.rolly.ball;
 
 import static com.rolly.ball.Constants.PPM;
+import static com.rolly.ball.Constants.V_HEIGHT;
+import static com.rolly.ball.Constants.V_WIDTH;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -15,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.rolly.ball.screens.GameScreen;
 
 public class HUD {
 	
@@ -33,7 +36,7 @@ public class HUD {
 		this.font = font;
 		white = new Label.LabelStyle(font, Color.WHITE);
 		camera = new OrthographicCamera();
-		port = new FitViewport(RollyBall.V_WIDTH, RollyBall.V_HEIGHT, camera);
+		port = new FitViewport(V_WIDTH, V_HEIGHT, camera);
 		stage = new Stage(port, batch);
 		skin = new Skin();
 		
@@ -45,8 +48,8 @@ public class HUD {
 		scoreLabel = new Label("Hi-Score: ", white);
 		
 		
-		table.add(distLabel).padBottom(10).padRight(300);
-		table.add(scoreLabel).padBottom(10).padRight(100);
+		table.add(distLabel).padRight(port.getScreenWidth()/3);
+		table.add(scoreLabel).padRight(port.getScreenWidth()/6);
 //		table.add(scoreLabel).pad(10);
 //		table.add(score.toString());
 	
@@ -57,7 +60,7 @@ public class HUD {
 	public void draw(Batch batch, String score, String hiscore)
 	{
 		
-		font.draw(batch, score, camera.position.x/2 + 10, font.getCapHeight() + 30);
-		font.draw(batch, hiscore, port.getScreenWidth(), font.getCapHeight() + 30);
+		font.draw(batch, score, distLabel.getRight() + port.getScreenWidth()/20, distLabel.getHeight()/1.5f);
+		font.draw(batch, hiscore, scoreLabel.getRight() + port.getScreenWidth()/20, scoreLabel.getHeight()/1.5f);
 	}
 }

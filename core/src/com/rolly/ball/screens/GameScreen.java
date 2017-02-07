@@ -23,6 +23,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.rolly.ball.Ball;
 
 import static com.rolly.ball.Constants.PPM;
+import static com.rolly.ball.Constants.V_HEIGHT;
+import static com.rolly.ball.Constants.V_WIDTH;
 
 import com.rolly.ball.CollisionManager;
 import com.rolly.ball.Ground;
@@ -38,8 +40,9 @@ public class GameScreen implements Screen{
 	private OrthographicCamera camera;
 	private Viewport port;
 	private Texture background;
-	
-	
+
+
+
 	private Box2DDebugRenderer b2dr;
 	private World world;
 	private Ground ground;
@@ -77,7 +80,7 @@ public class GameScreen implements Screen{
 		
 		gameState = State.Ready;
 		camera = new OrthographicCamera();
-		port = new FitViewport(RollyBall.V_WIDTH / PPM, RollyBall.V_HEIGHT / PPM, camera);
+		port = new FitViewport(V_WIDTH / PPM, V_HEIGHT / PPM, camera);
 		camera.position.set((port.getWorldWidth()/2) , (port.getWorldHeight()/2) , 0);
 		groundHeight = (port.getWorldHeight()/4);
 	}
@@ -85,7 +88,7 @@ public class GameScreen implements Screen{
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
-	world = new World(new Vector2(0, -12.81f), true);
+	world = new World(new Vector2(0, -V_HEIGHT/50), true);
 	world.setContactListener(cm = new CollisionManager());
 	b2dr = new Box2DDebugRenderer();
 		ground = new Ground(port.getWorldWidth() *2, groundHeight, world);
@@ -93,9 +96,11 @@ public class GameScreen implements Screen{
 		handler = new Handler();
 		background = new Texture("skyy.jpg");
 		music = Gdx.audio.newMusic(Gdx.files.internal("bgm.wav"));
+		music.setLooping(true);
 		die = Gdx.audio.newMusic(Gdx.files.internal("die.wav"));
 		jump = Gdx.audio.newSound(Gdx.files.internal("jump.wav"));
 		ready = Gdx.audio.newMusic(Gdx.files.internal("ready.wav"));
+		ready.setLooping(true);
 		
 		
 		initFonts();
@@ -147,8 +152,9 @@ public class GameScreen implements Screen{
 			distance = 0f;
 			score = 0;
 			die.stop();
-			ready.setLooping(true);
 			ready.play();
+
+
 			
 			if (rolly == null)
 			{
@@ -168,7 +174,7 @@ public class GameScreen implements Screen{
 			
 			
 			
-			music.setLooping(true);
+
 			if (!ready.isPlaying())
 			{
 			music.play();
@@ -217,10 +223,11 @@ public class GameScreen implements Screen{
 				}
 				
 				
-				if (pressed && !Gdx.input.isKeyPressed(Input.Keys.SPACE))
+				if ((pressed && !Gdx.input.isKeyPressed(Input.Keys.SPACE)) && (pressed && !Gdx.input.isTouched()))
 				{
-					pressed = false;
+
 					rolly.endjump();
+					pressed = false;
 				}
 				
 				if (rolly.GetBody().getPosition().y < -75/PPM)
@@ -237,6 +244,7 @@ public class GameScreen implements Screen{
 			music.stop();
 			die.play();
 			die.setLooping(false);
+				ready.setLooping(true);
 //			world.destroyBody(rolly.GetBody());
 			rolly.kill(true);
 			rolly = null;
@@ -290,6 +298,8 @@ public class GameScreen implements Screen{
 		
 		
 //		b2dr.render(world, camera.combined);
+
+		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) Gdx.app.exit();
 	}
 
 	@Override

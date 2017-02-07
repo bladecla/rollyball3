@@ -15,6 +15,7 @@ public class AndroidLauncher extends AndroidApplication {
 		config.hideStatusBar = true;
 		config.useWakelock = true;
 
+
 		initialize(new RollyBall(), config);
 	}
 }

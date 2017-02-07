@@ -1,13 +1,14 @@
 package com.rolly.ball;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.rolly.ball.screens.GameScreen;
 
 public class RollyBall extends Game {
 	
 	public SpriteBatch batch;
-	public static final float V_WIDTH = 800, V_HEIGHT = 600;
+
 	
 	@Override
 	public void create () {
