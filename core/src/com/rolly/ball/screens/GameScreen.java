@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.rolly.ball.Ball;
@@ -55,9 +56,11 @@ public class GameScreen implements Screen{
 	private Integer score, hiscore = 0;
 	private float deltaP;
 	private float platformDelay = 1.0f;
-	private float timer;
+	private float timer, scoreSpeed = 4;
 	private float oldP;
 	private float groundHeight;
+	private float defaultVolume = .5f, currentVolume;
+	private boolean muted = false;
 	private boolean jumping, drawMsg = true;
 	private boolean pressed = false;
 	public State gameState;
@@ -65,7 +68,7 @@ public class GameScreen implements Screen{
 	
 	private BitmapFont font;
 	
-	private Music music, die, ready;
+	private Music music, die, ready, currentMusic;
 	private Sound  jump;
 	
 	private enum State
@@ -83,7 +86,7 @@ public class GameScreen implements Screen{
 		camera = new OrthographicCamera();
 		port = new FitViewport(V_WIDTH / PPM, V_HEIGHT / PPM, camera);
 		camera.position.set((port.getWorldWidth()/2) , (port.getWorldHeight()/2) , 0);
-		groundHeight = (port.getWorldHeight()/4);
+
 	}
 	
 	@Override
@@ -92,15 +95,21 @@ public class GameScreen implements Screen{
 	world = new World(new Vector2(0, -V_HEIGHT/30), true);
 	world.setContactListener(cm = new CollisionManager());
 	b2dr = new Box2DDebugRenderer();
-		ground = new Ground(port.getWorldWidth() *2, groundHeight, world);
+		ground = new Ground(port.getWorldWidth() *2, port.getWorldHeight()/4, world);
 //		rolly = new Ball(world);
 		handler = new Handler();
 		background = new Texture("skyy.jpg");
+
+		currentVolume = defaultVolume;
 		music = Gdx.audio.newMusic(Gdx.files.internal("bgm.wav"));
+		music.setVolume(currentVolume);
 		music.setLooping(true);
 		die = Gdx.audio.newMusic(Gdx.files.internal("die.wav"));
+		die.setVolume(currentVolume);
 		jump = Gdx.audio.newSound(Gdx.files.internal("jump.wav"));
+
 		ready = Gdx.audio.newMusic(Gdx.files.internal("ready.wav"));
+		ready.setVolume(currentVolume);
 		ready.setLooping(true);
 		
 		
@@ -149,14 +158,15 @@ public class GameScreen implements Screen{
 		switch(gameState)
 		{
 		case Ready:
-			
+			if(!ready.isLooping() && !Gdx.input.isTouched()){gameState = State.Play;}
 			distance = 0f;
 			score = 0;
 			die.stop();
-			ready.play();
+			currentMusic = ready;
+			currentMusic.play();
 
 		message = "Tap!";
-			
+
 			if (rolly == null)
 			{
 				rolly = new Ball(world);
@@ -166,25 +176,28 @@ public class GameScreen implements Screen{
 			}
 			if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || (Gdx.input.justTouched()))
 			{
-				message = "Let's Roll!";
+
+
 				ready.setLooping(false);
-			gameState = State.Play;
+
+
 			}	
 			break;
 			
 		case Play:
-			
-			
+
+			message = "Let's Roll!";
 			
 
 			if (!ready.isPlaying())
 			{
-			music.play();
+				currentMusic = music;
+			currentMusic.play();
 			}
 			
 			deltaP = rolly.GetBody().getPosition().x - oldP;
 			distance += deltaP;
-			score = (int)distance;
+			score = (int)(scoreSpeed*distance/rolly.getXVel());
 			if (score > hiscore)
 			{
 				hiscore = score;
@@ -210,15 +223,16 @@ public class GameScreen implements Screen{
 				if (Gdx.input.isKeyPressed(Input.Keys.SPACE) || Gdx.input.isTouched())
 				{
 //					System.out.println(camera.position.x);
+
 					pressed = true;
 					if(cm.IsGrounded())
 					{
 						jumping = rolly.jump(jumping);
 					
-						if ( jumping)
+						if ( jumping && !muted)
 						{
 					
-							jump.play();
+							jump.play(currentVolume);
 					
 						}	
 					}
@@ -245,7 +259,8 @@ public class GameScreen implements Screen{
 			if (rolly != null)
 			{
 			music.stop();
-			die.play();
+				currentMusic = die;
+			currentMusic.play();
 			die.setLooping(false);
 				ready.setLooping(true);
 //			world.destroyBody(rolly.GetBody());
@@ -307,7 +322,14 @@ public class GameScreen implements Screen{
 //		hud.setScore(distance);
 		hud.stage.act();
 		hud.stage.draw();
-		
+		muted = hud.muted();
+		if (muted)
+		{
+		currentMusic.setVolume(0);
+		} else if (!muted)
+		{
+			currentMusic.setVolume(currentVolume);
+		}
 		
 //		b2dr.render(world, camera.combined);
 
@@ -349,6 +371,7 @@ public class GameScreen implements Screen{
 		jump.dispose();
 		background.dispose();
 		font.dispose();
+		hud.dispose();
 	}
 	
 	

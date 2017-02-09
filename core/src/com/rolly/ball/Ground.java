@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
 import static com.rolly.ball.Constants.PPM;
+import static com.rolly.ball.Constants.V_HEIGHT;
 
 public class Ground extends Sprite {
 
@@ -22,7 +23,7 @@ public class Ground extends Sprite {
 	public Ground(float w, float h, World world)
 	{
 		super(sprite);
-		setBounds(0,0,w,h/2 + 10/PPM);
+		setBounds(0,0,w,h/2 + V_HEIGHT/60/PPM);
 		
 		bdef = new BodyDef();
 		bdef.type = BodyDef.BodyType.StaticBody;

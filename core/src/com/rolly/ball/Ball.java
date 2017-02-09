@@ -21,7 +21,7 @@ public class Ball extends Sprite{
 	//fields
 	private int diameter = (int)V_HEIGHT/6;
 	private float jumpVel = diameter/10;
-	private float xVel = diameter/30 ;
+	private float xVel = diameter/30;
 	private BodyDef bdef = new BodyDef();
 	private FixtureDef fdef = new FixtureDef();
 	private Body body;
@@ -37,6 +37,7 @@ public class Ball extends Sprite{
 		super(sprite);
 
 		setBounds(0, 0, diameter/PPM, diameter/PPM);
+
 		setOriginCenter();
 		bdef.type = BodyDef.BodyType.DynamicBody;
 		bdef.position.set(new Vector2(V_WIDTH/10/PPM, V_HEIGHT/PPM));
