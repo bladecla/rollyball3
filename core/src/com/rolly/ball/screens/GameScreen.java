@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
@@ -50,10 +51,12 @@ public class GameScreen implements Screen{
 	private CollisionManager cm;
 	private Handler handler;
 	private HUD hud;
-	
+	private Preferences save = Gdx.app.getPreferences("saveData");
+
+
 	private Ball rolly;
 	private float distance = 0f;
-	private Integer score, hiscore = 0;
+	private Integer score, hiscore = save.getInteger("hi-score", 0);
 	private float deltaP;
 	private float platformDelay = 1.0f;
 	private float timer, scoreSpeed = 4;
@@ -70,6 +73,9 @@ public class GameScreen implements Screen{
 	
 	private Music music, die, ready, currentMusic;
 	private Sound  jump;
+
+
+
 	
 	private enum State
 	{
@@ -198,7 +204,7 @@ public class GameScreen implements Screen{
 			deltaP = rolly.GetBody().getPosition().x - oldP;
 			distance += deltaP;
 			score = (int)(scoreSpeed*distance/rolly.getXVel());
-			if (score > hiscore)
+			if (score > save.getInteger("hi-score"))
 			{
 				hiscore = score;
 			}
@@ -269,6 +275,10 @@ public class GameScreen implements Screen{
 				timer = 0;
 				message = "GAME OVER";
 				drawMsg = true;
+				if (hiscore > save.getInteger("hi-score")) {
+					save.putInteger("hi-score", hiscore);
+					save.flush();
+				}
 			}
 
 
