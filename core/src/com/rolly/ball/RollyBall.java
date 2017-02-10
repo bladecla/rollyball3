@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.rolly.ball.screens.GameScreen;
+import com.rolly.ball.screens.SplashScreen;
 
 public class RollyBall extends Game {
 	
@@ -14,7 +15,7 @@ public class RollyBall extends Game {
 	public void create () {
 		
 		batch = new SpriteBatch();
-		setScreen(new GameScreen(this));
+		setScreen(new SplashScreen(this));
 	}
 
 	@Override
