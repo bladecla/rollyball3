@@ -14,6 +14,9 @@ import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Matrix4;
 import com.rolly.ball.RollyBall;
 
+import static com.rolly.ball.Constants.V_HEIGHT;
+import static com.rolly.ball.Constants.V_WIDTH;
+
 /**
  * Created by Bladecla on 2/10/2017.
  */
@@ -25,6 +28,7 @@ public class SplashScreen implements Screen {
     private SpriteBatch batch;
     private float timer;
     private boolean play = true;
+    private float width;
 
     public SplashScreen(RollyBall game){
         this.game = game;
@@ -34,8 +38,10 @@ public class SplashScreen implements Screen {
     public void show() {
     jingle = Gdx.audio.newSound(Gdx.files.internal("cheezy.wav"));
         cheezyLogo = new Texture(Gdx.files.internal("cheezylogo.png"));
+
     batch = new SpriteBatch();
         timer = 0;
+        width = V_HEIGHT*cheezyLogo.getWidth()/cheezyLogo.getHeight();
     }
 
     @Override
@@ -47,7 +53,7 @@ public class SplashScreen implements Screen {
         if (timer > .5)
         {
             batch.begin();
-            batch.draw(cheezyLogo, Gdx.graphics.getWidth()/2-(cheezyLogo.getWidth()/2), Gdx.graphics.getHeight()/2-(cheezyLogo.getHeight()/2));
+            batch.draw(cheezyLogo, V_WIDTH/2-(width/2), 0, width, V_HEIGHT  );
 
             batch.end();
             if(play)
