@@ -36,7 +36,7 @@ public class SplashScreen implements Screen {
 
     @Override
     public void show() {
-    jingle = Gdx.audio.newSound(Gdx.files.internal("cheezy.wav"));
+    jingle = Gdx.audio.newSound(Gdx.files.internal("cheezygames.wav"));
         cheezyLogo = new Texture(Gdx.files.internal("cheezylogo.png"));
 
     batch = new SpriteBatch();
