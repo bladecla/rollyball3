@@ -49,7 +49,7 @@ public class Platform extends Sprite{
 		bdef.position.set(x + w/PPM/2, spawnRange/PPM );
 		
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(w/2/PPM, h/2/PPM);
+		shape.setAsBox(w/2/PPM, h/2/PPM - h/5/PPM);
 		
 		fdef = new FixtureDef();
 		fdef.density = 2;

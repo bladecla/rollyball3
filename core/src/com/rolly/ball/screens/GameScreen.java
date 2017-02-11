@@ -314,12 +314,14 @@ public class GameScreen implements Screen{
 		game.batch.begin();
 		game.batch.draw(background, camera.position.x - port.getWorldWidth()/2, 0, port.getWorldWidth(), port.getWorldHeight());
 		ground.draw(game.batch);
+
+		handler.Draw(game.batch);
 		if (rolly != null)
 		{
 		rolly.draw(game.batch);
 		
 		}
-		handler.Draw(game.batch);
+
 		game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
 		hud.draw(game.batch, score.toString(), hiscore.toString());
 		if (drawMsg) {

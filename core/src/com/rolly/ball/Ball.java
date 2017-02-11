@@ -29,7 +29,7 @@ public class Ball extends Sprite{
 	private Fixture sensor;
 	private World world;
 	private boolean setDead = false, dead = false;
-	private static Texture sprite  = new Texture("Rolly3.png");
+	private static Texture sprite  = new Texture("Rolly4.png");
 	
 	//constructors
 	public Ball(World world)
