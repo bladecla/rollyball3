@@ -21,7 +21,7 @@ public class Ball extends Sprite{
 	//fields
 	private int diameter = (int)V_HEIGHT/6;
 	private float jumpVel = diameter/10;
-	private float xVel = diameter/30;
+	private float xVel = diameter/35;
 	private BodyDef bdef = new BodyDef();
 	private FixtureDef fdef = new FixtureDef();
 	private Body body;
@@ -158,7 +158,9 @@ public class Ball extends Sprite{
 		{
 		body.applyForceToCenter(V_HEIGHT/500, 0, true);
 		}
-		xVel += Gdx.graphics.getDeltaTime()/100;
+		if(xVel < diameter / 20) {
+			xVel += Gdx.graphics.getDeltaTime() / 100;
+		}
 	}
 
 	

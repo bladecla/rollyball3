@@ -59,7 +59,7 @@ public class GameScreen implements Screen{
 	private Integer score, hiscore = save.getInteger("hi-score", 0);
 	private float deltaP;
 	private float platformDelay = 1.0f;
-	private float timer, scoreSpeed = 4;
+	private float timer, scoreSpeed = 400;
 	private float oldP;
 	private float groundHeight;
 	private float defaultVolume = .5f, currentVolume;
